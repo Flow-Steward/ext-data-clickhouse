@@ -1,0 +1,22 @@
+{
+  "binaries": {
+    "linux-amd64": {
+      "path": "bin/linux-amd64/toolbox",
+      "sha256": "98dd73228a1737597d35235c702fb7cce3c2b3e8f55048c74919add72cffc4b5",
+      "size": 33169534
+    },
+    "linux-arm64": {
+      "path": "bin/linux-arm64/toolbox",
+      "sha256": "7c473f9b0a4895258e69d073d605033925ff348f72682f64fbaab4fd850d0484",
+      "size": 31064190
+    }
+  },
+  "go_image": "golang:1.26.2-bookworm@sha256:47ce5636e9936b2c5cbf708925578ef386b4f8872aec74a67bd13a627d242b19",
+  "patch_sha256": "f3148416af3e8c9716d110334a5a916d6144dad9389f4704eb9212193136828e",
+  "registered_prebuilts": [
+    "clickhouse"
+  ],
+  "source": "https://github.com/googleapis/mcp-toolbox",
+  "upstream_commit": "b0010060a939455d91e4f8ba62dc3e72b1892469",
+  "upstream_tag": "v1.3.0"
+}

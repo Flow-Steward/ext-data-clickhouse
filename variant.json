@@ -1,0 +1,6 @@
+{
+  "prebuilts": [
+    "clickhouse"
+  ],
+  "display_name": "ClickHouse (Google MCP Toolbox)"
+}
