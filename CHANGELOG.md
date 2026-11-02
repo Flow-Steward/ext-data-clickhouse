@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.3.1
+
+- Use official database brand artwork with recorded source attribution.
+
+
 ## 1.3.0
 
 - Preserve passwordless ClickHouse by supplying its required empty password environment variable; explicit passwords still win.
