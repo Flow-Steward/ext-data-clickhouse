@@ -119,3 +119,81 @@ def test_visible_ui_describes_only_this_database():
     setup = yaml.safe_load((ROOT / "ui/components/overview.yaml").read_text())
     assert NAME in setup["title"]
     assert NAME in setup["body"]
+
+
+@pytest.mark.parametrize("shape", ["resolved", "legacy", "combined"])
+def test_secret_environment_is_forwarded_without_a_provider(shape, monkeypatch):
+    from copy import deepcopy
+    from test_toolbox_dataset_connector import _runtime_module
+
+    module = _runtime_module()
+
+    def no_provider(*args, **kwargs):
+        raise AssertionError("environment resolution must not start a provider")
+
+    monkeypatch.setattr(module.subprocess, "Popen", no_provider)
+    key = SECRET_ENV[0]
+    secret_refs = (
+        {"values": {"env": {key: "nested-fixture"}}}
+        if shape == "resolved"
+        else {"env": {key: "legacy-fixture"}}
+        if shape == "legacy"
+        else {"values": {"env": {key: "nested-fixture"}}, "env": {key: "legacy-fixture"}}
+    )
+    before = deepcopy(secret_refs)
+    config = {"prebuilt": EXPECTED_PREBUILTS[0]}
+    env = module._toolbox_env(config, secret_refs)
+    assert env[key] == ("nested-fixture" if shape == "resolved" else "legacy-fixture")
+    assert secret_refs == before
+
+
+def test_environment_override_order_stays_explicit(monkeypatch):
+    from test_toolbox_dataset_connector import _runtime_module
+
+    module = _runtime_module()
+    config_key = EXPECTED_FIELDS[0]
+    public_key = PUBLIC_ENV[0]
+    secret_key = SECRET_ENV[0]
+    monkeypatch.setenv(public_key, "inherited-fixture")
+    config = {
+        "prebuilt": EXPECTED_PREBUILTS[0],
+        config_key: "typed-fixture",
+        "env": {public_key: "public-fixture"},
+    }
+    env = module._toolbox_env(
+        config, {"values": {"password": "field-fixture", "env": {secret_key: "resolved-fixture"}}}
+    )
+    assert env[public_key] == "public-fixture"
+    assert env[secret_key] == "resolved-fixture"
+
+
+@pytest.mark.parametrize(
+    "secrets,expected",
+    [
+        ({}, ""),
+        ({"values": {"password": ""}}, ""),
+        ({"values": {"password": "explicit-fixture"}}, "explicit-fixture"),
+        ({"values": {"env": {"CLICKHOUSE_PASSWORD": ""}}}, ""),
+    ],
+)
+def test_clickhouse_passwordless_and_explicit_password(secrets, expected, monkeypatch):
+    from test_toolbox_dataset_connector import _runtime_module
+
+    module = _runtime_module()
+    monkeypatch.delenv("CLICKHOUSE_PASSWORD", raising=False)
+    env = module._toolbox_env({"prebuilt": "clickhouse"}, secrets)
+    assert "CLICKHOUSE_PASSWORD" in env
+    assert env["CLICKHOUSE_PASSWORD"] == expected
+
+
+def test_clickhouse_explicit_empty_password_replaces_ambient_password(monkeypatch):
+    from test_toolbox_dataset_connector import _runtime_module
+
+    module = _runtime_module()
+    monkeypatch.setenv("CLICKHOUSE_PASSWORD", "ambient-fixture")
+    assert (
+        module._toolbox_env({"prebuilt": "clickhouse"}, {"values": {"password": ""}})[
+            "CLICKHOUSE_PASSWORD"
+        ]
+        == ""
+    )

@@ -366,22 +366,30 @@ def _toolbox_env(config: dict[str, Any], secret_refs: dict[str, Any]) -> dict[st
     prebuilt = _runtime_prebuilt(config)
     env = dict(os.environ)
     explicit_env = _as_dict(config.get("env"))
-    secret_env = _as_dict(secret_refs.get("env"))
     secrets = _secret_ref_values(secret_refs)
+    secret_env = {
+        **_as_dict(secrets.get("env")),
+        **_as_dict(secret_refs.get("env")),
+    }
     for env_name, config_key in TOOLBOX_ENV_FIELDS.get(prebuilt, {}).items():
         value = explicit_env.get(env_name)
         if value is None:
             value = config.get(config_key)
         if value is None:
             value = secrets.get(config_key) or secrets.get(env_name)
-        if value is not None and str(value) != "":
+            if env_name == "CLICKHOUSE_PASSWORD" and config_key in secrets:
+                value = secrets[config_key]
+        if value is not None and (str(value) != "" or env_name == "CLICKHOUSE_PASSWORD"):
             env[env_name] = str(value)
     for env_name, value in explicit_env.items():
-        if value is not None and str(value) != "":
+        if value is not None and (str(value) != "" or env_name == "CLICKHOUSE_PASSWORD"):
             env[str(env_name)] = str(value)
     for env_name, value in secret_env.items():
-        if value is not None and str(value) != "":
+        if value is not None and (str(value) != "" or env_name == "CLICKHOUSE_PASSWORD"):
             env[str(env_name)] = str(value)
+    # The pinned prebuilt requires this variable even for passwordless users.
+    if prebuilt == "clickhouse":
+        env.setdefault("CLICKHOUSE_PASSWORD", "")
     return env
 
 

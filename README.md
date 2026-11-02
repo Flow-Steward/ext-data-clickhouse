@@ -14,7 +14,7 @@ Create a project connection using these settings:
 | `user` | ClickHouse user. Required. |
 | `protocol` | HTTPS is the pinned driver default. Native TCP protocol is not supported by this prebuilt. Optional. |
 
-Store the ClickHouse user password in the connection secrets. Dataset advanced environment exposes only the named CLICKHOUSE_ source variables; password overrides remain in secrets. Writer connections use the explicit settings above.
+Store the ClickHouse user password in the connection secrets. Resolved dataset secret environment values are forwarded to the native process; direct environment overrides retain their established precedence. Dataset advanced environment exposes only the named CLICKHOUSE_ source variables; password overrides remain in secrets. Writer connections use the explicit settings above.
 
 Select `https` (the pinned driver default) or `http` using `protocol`. The shipped prebuilt does not expose native TCP or a `secure` switch; HTTPS verifies the server certificate. Supply the appropriate HTTP(S) port for your server.
 
@@ -26,7 +26,7 @@ Datasets support connection testing, typed schema introspection, saved SQL, visu
 
 The host resolves matching project configuration and secrets, account/project scope, execution context and a durable external-effect claim. Test mode suppresses writes before a driver starts. Writes execute once; uncertain dispatched failures return `retryable: false` and require checking the database before a manual retry. Workflow writes do not make dataset queries writable.
 
-The bounded SQL subset refuses raw dollar characters and backslashes in read SQL; write SQL also refuses raw dollar characters. Put those values in bound parameters. A top-level read LIMIT accepts one integer literal with an optional integer OFFSET. SQL and runtime safety guards are unchanged in 1.3.0.
+The bounded SQL subset refuses raw dollar characters and backslashes in read SQL; write SQL also refuses raw dollar characters. Put those values in bound parameters. A top-level read LIMIT accepts one integer literal with an optional integer OFFSET. The existing SQL safety guards are unchanged; 1.3.0 adds database-specific settings validation and preserves native payloads.
 
 ## Upgrade compatibility
 
