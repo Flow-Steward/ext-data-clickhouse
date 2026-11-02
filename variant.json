@@ -2,5 +2,5 @@
   "prebuilts": [
     "clickhouse"
   ],
-  "display_name": "ClickHouse (Google MCP Toolbox)"
+  "display_name": "ClickHouse"
 }
