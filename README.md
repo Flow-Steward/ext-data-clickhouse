@@ -1,6 +1,14 @@
 # ClickHouse for Flow Steward
 
-Connect **ClickHouse** datasets and run parameterized workflow writes. This repository contains one installable ClickHouse extension, version **1.3.4**, with separate Linux AMD64 and ARM64 archives. No other database can be selected or installed from this package.
+Connect ClickHouse to Flow Steward for analytical lookups, reusable Dataset queries and workflow-driven table changes. The Dataset connector tests the connection, inspects typed table schemas, checks saved SQL against selected resources, previews results, executes saved queries and infers their output schema. Use analytical results to drive later workflow steps, compare records or retrieve reporting data while keeping Dataset queries read-only.
+
+A separate workflow action executes one INSERT, UPDATE or DELETE using named parameters and an optional parameter schema. This provides a way to store workflow results or change existing data when the ClickHouse server supports the supplied SQL syntax. Parameter values are supplied separately from the statement, allowing the same workflow to reuse SQL with different inputs.
+
+Configure the server host, HTTP(S) port, database and user, with any required password in connection secrets. HTTPS verifies the server certificate; native TCP is not supported. Read results are limited to 100 rows and 480 KiB, and SQL support is a restricted subset. The connector does not translate unsupported mutation syntax, administer schemas or provide database triggers.
+
+## Runtime and operation requirements
+
+Connect **ClickHouse** datasets and run parameterized workflow writes. This repository contains one installable ClickHouse extension, version **1.3.5**, with separate Linux AMD64 and ARM64 archives. No other database can be selected or installed from this package.
 
 ## Set up a ClickHouse connection
 

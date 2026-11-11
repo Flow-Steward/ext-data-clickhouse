@@ -4,10 +4,15 @@ lifecycle:
   data_migrations: []
 extension_id: flowsteward.data-connector-mcp-toolbox-clickhouse
 kind: tool_provider
-version: 1.3.4
+version: 1.3.5
 release_stage: active
 display_name: ClickHouse
-description: Read ClickHouse datasets and run parameterized workflow writes.
+description: |-
+  Connect ClickHouse to Flow Steward for analytical lookups, reusable Dataset queries and workflow-driven table changes. The Dataset connector tests the connection, inspects typed table schemas, checks saved SQL against selected resources, previews results, executes saved queries and infers their output schema. Use analytical results to drive later workflow steps, compare records or retrieve reporting data while keeping Dataset queries read-only.
+
+  A separate workflow action executes one INSERT, UPDATE or DELETE using named parameters and an optional parameter schema. This provides a way to store workflow results or change existing data when the ClickHouse server supports the supplied SQL syntax. Parameter values are supplied separately from the statement, allowing the same workflow to reuse SQL with different inputs.
+
+  Configure the server host, HTTP(S) port, database and user, with any required password in connection secrets. HTTPS verifies the server certificate; native TCP is not supported. Read results are limited to 100 rows and 480 KiB, and SQL support is a restricted subset. The connector does not translate unsupported mutation syntax, administer schemas or provide database triggers.
 vendor:
   name: Flow Steward
   support_url: https://github.com/Flow-Steward/ext-data-clickhouse/issues
@@ -18,9 +23,16 @@ listing:
   - clickhouse
   - database
   - dataset
-  summary: ClickHouse dataset reads and workflow writes.
-  description: Connect project-scoped ClickHouse databases for saved queries, schema introspection and
-    parameterized workflow writes.
+  summary: |-
+    Inspect ClickHouse schemas, query read-only Datasets and run parameterized workflow INSERT, UPDATE or DELETE.
+  description: |-
+    Connect ClickHouse to Flow Steward for analytical lookups, reusable Dataset queries and workflow-driven table changes. The Dataset connector tests the connection, inspects typed table schemas, checks saved SQL against selected resources, previews results, executes saved queries and infers their output schema. Use analytical results to drive later workflow steps, compare records or retrieve reporting data while keeping Dataset queries read-only.
+
+    A separate workflow action executes one INSERT, UPDATE or DELETE using named parameters and an optional parameter schema. This provides a way to store workflow results or change existing data when the ClickHouse server supports the supplied SQL syntax. Parameter values are supplied separately from the statement, allowing the same workflow to reuse SQL with different inputs.
+
+    Configure the server host, HTTP(S) port, database and user, with any required password in connection secrets. HTTPS verifies the server certificate; native TCP is not supported. Read results are limited to 100 rows and 480 KiB, and SQL support is a restricted subset. The connector does not translate unsupported mutation syntax, administer schemas or provide database triggers.
+  setup_summary: |-
+    Create a ClickHouse project connection with host, the server’s HTTP(S) port, database and user, and store any password required by the server in secrets. Choose HTTPS or HTTP explicitly as needed; this package does not use ClickHouse’s native TCP protocol.
 package:
   format: flow-steward-extension
   license: Apache-2.0
