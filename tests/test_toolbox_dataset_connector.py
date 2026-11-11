@@ -676,7 +676,8 @@ def test_toolbox_dataset_connector_uses_canonical_envelopes() -> None:
     assert orders["columns"][0]["data_type"]
 
 
-def test_toolbox_dataset_connector_query_failures_are_structured() -> None:
+def test_toolbox_dataset_connector_query_failures_are_structured(monkeypatch, tmp_path) -> None:
+    monkeypatch.delenv("PYTHONPATH", raising=False)
     completed = subprocess.run(  # nosemgrep: fixed Python executable and extension runtime path. # nosec B603
         [sys.executable, str(TEST_RUNTIME)],
         input=json.dumps(
@@ -691,9 +692,10 @@ def test_toolbox_dataset_connector_query_failures_are_structured() -> None:
         capture_output=True,
         check=False,
         env=toolbox_env(),
+        cwd=tmp_path,
     )
 
-    assert completed.returncode == 2
+    assert completed.returncode == 2, completed.stderr
     payload = json.loads(completed.stdout)
     assert payload["ok"] is False
     assert payload["result"] == {}
@@ -2050,7 +2052,8 @@ def test_foreign_or_incomplete_envelope_is_refused_before_toolbox_starts(
     assert response["errors"][0]["code"] == "invalid_host_envelope"
 
 
-def test_the_entrypoint_refuses_a_request_without_the_host_contract() -> None:
+def test_the_entrypoint_refuses_a_request_without_the_host_contract(monkeypatch, tmp_path) -> None:
+    monkeypatch.delenv("PYTHONPATH", raising=False)
     completed = subprocess.run(  # nosemgrep: fixed Python executable and extension runtime path. # nosec B603
         [sys.executable, str(TEST_RUNTIME)],
         input=json.dumps({"mode": "query", "query": {"query_id": "runtime_health"}}),
@@ -2058,9 +2061,10 @@ def test_the_entrypoint_refuses_a_request_without_the_host_contract() -> None:
         capture_output=True,
         check=False,
         env=toolbox_env(),
+        cwd=tmp_path,
     )
 
-    assert completed.returncode == 2
+    assert completed.returncode == 2, completed.stderr
     payload = json.loads(completed.stdout)
     assert payload["error_code"] == "invalid_host_envelope"
     assert payload["definitely_no_external_effect"] is True

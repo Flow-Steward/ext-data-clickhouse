@@ -12,6 +12,8 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def main() -> int:
+    # Match direct main.py execution without relying on PYTHONPATH or the working directory.
+    sys.path.insert(0, str(ROOT))
     spec = importlib.util.spec_from_file_location("toolbox_runtime_under_test", ROOT / "main.py")
     if spec is None or spec.loader is None:
         raise RuntimeError("Unable to load Toolbox extension runtime")
