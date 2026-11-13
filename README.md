@@ -8,7 +8,7 @@ Configure the server host, HTTP(S) port, database and user, with any required pa
 
 ## Runtime and operation requirements
 
-Connect **ClickHouse** datasets and run parameterized workflow writes. This repository contains one installable ClickHouse extension, version **1.3.6**, with separate Linux AMD64 and ARM64 archives. No other database can be selected or installed from this package.
+Connect **ClickHouse** datasets and run parameterized workflow writes. This repository contains one installable ClickHouse extension, version **1.3.7**, with separate Linux AMD64 and ARM64 archives. No other database can be selected or installed from this package.
 
 ## Set up a ClickHouse connection
 
@@ -76,14 +76,14 @@ Pushes to `main` and pull requests run the shared extension build workflow. The 
 After the versioned release commit is on `main`, publish by pushing its version tag:
 
 ```sh
-git tag v1.3.6
-git push origin v1.3.6
+git tag v1.3.7
+git push origin v1.3.7
 ```
 
 The release workflow runs the shared checks, builds the target archives and publishes the GitHub release and checksums. Do not move an existing tag. To rerun a release for an existing tag, dispatch the same workflow:
 
 ```sh
-gh workflow run release.yml --repo Flow-Steward/ext-data-clickhouse --ref main -f tag=v1.3.6
+gh workflow run release.yml --repo Flow-Steward/ext-data-clickhouse --ref main -f tag=v1.3.7
 ```
 
 The manifest, descriptor (when present), package version and tag must identify the same release. Release publication uses the workflow token; no additional repository secret is required by these callers.
@@ -96,3 +96,7 @@ The following integration coverage requires a separate environment and is not pa
 
 - `tests/test_packaged_toolbox_postgres_integration.py`: Creates and queries a disposable external PostgreSQL database using FS_TOOLBOX_INTEGRATION_DSN/FS_DB_DSN.
 - `tests/test_projected_dataset_postgres_e2e.py`: Creates and queries a disposable external PostgreSQL database using FS_TOOLBOX_INTEGRATION_DSN/FS_DB_DSN.
+
+## Workflow action setup and examples
+
+See [Workflow actions](docs/workflow-actions.md) for choosing Dataset reads versus explicit writes, connection requirements and copyable field examples.
