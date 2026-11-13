@@ -1,4 +1,0 @@
-github.com/googleapis/mcp-toolbox/internal/sources/clickhouse
-github.com/googleapis/mcp-toolbox/internal/tools/clickhouse/clickhouseexecutesql
-github.com/googleapis/mcp-toolbox/internal/tools/clickhouse/clickhouselistdatabases
-github.com/googleapis/mcp-toolbox/internal/tools/clickhouse/clickhouselisttables
