@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.3.11
+
+- Refresh bundled ch-go to v0.76.0 and grpc-gateway to v2.34.0, including required transitive dependencies, for Linux AMD64 and ARM64.
+- Preserve the pinned Toolbox v1.17.0 source, verified Go 1.27.4 compiler, native parameter binding, SQL controls and approved ClickHouse profile.
+- Verify the selected versions in both actual native payloads and reject the superseded dependencies before packaging.
+
+[Full changelog](https://github.com/Flow-Steward/ext-data-clickhouse/compare/v1.3.10...v1.3.11)
+
 ## 1.3.10
 
 ### Added
