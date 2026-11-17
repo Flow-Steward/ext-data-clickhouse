@@ -21,7 +21,8 @@
     "tests/test_toolbox_dataset_connector.py",
     "tests/test_vendored_wheels.py",
     "tests/test_write_sql_guards.py",
-    "tests/test_native_build_contract.py"
+    "tests/test_native_build_contract.py",
+    "tests/test_clickhouse_dependency_refresh.py"
   ],
   "additional_assets": [],
   "payload_sources": []
