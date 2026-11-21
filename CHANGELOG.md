@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.3.12
+
+- Refresh the bundled Google API, Gen AI, OpenTelemetry, JWK, HTTP, and compression modules for Linux AMD64 and ARM64.
+- Keep the pinned Toolbox source, Go 1.27.4 toolchain, approved database profile, and native SQL controls.
+
+[Full changelog](https://github.com/Flow-Steward/ext-data-clickhouse/compare/v1.3.11...v1.3.12)
+
 ## 1.3.11
 
 - Refresh bundled ch-go to v0.76.0 and grpc-gateway to v2.34.0, including required transitive dependencies, for Linux AMD64 and ARM64.
